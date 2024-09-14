@@ -19,14 +19,7 @@ public class FileIO{
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         if (SUPPORT_STANDARD_FILEIO){
-
-            InputStream inputStream;
-            if (fileName.contains("/")) {
-                inputStream = FileIO.class.getResourceAsStream(fileName.substring(fileName.lastIndexOf('/')));
-            }
-            else {
-                inputStream = FileIO.class.getResourceAsStream("/"+fileName);
-            }
+            InputStream inputStream = FileIO.class.getResourceAsStream("/"+fileName);
             if(inputStream == null) {
                 String ext = fileName.substring(fileName.lastIndexOf('.')).toUpperCase();
                 inputStream = getFileFromResourceAsStream(fileName.substring(0, fileName.lastIndexOf('.'))+ext);
@@ -42,6 +35,8 @@ public class FileIO{
                 }
                 catch (IOException e) {
                     throw new RuntimeException(e);
+                } finally {
+                    inputStream.close();
                 }
 
                 return buffer.toByteArray();
